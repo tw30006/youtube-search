@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function SearchBar({ onSearch }) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
 
   //處理輸入變更
   function handleInputChange(e) {
@@ -11,7 +11,7 @@ export default function SearchBar({ onSearch }) {
 
   //我按enter之後再發送api
   function handleKeyDown(e) {
-    if (e.code === "Enter") {
+    if (e.code === 'Enter') {
       performSearch(input);
     }
   }
