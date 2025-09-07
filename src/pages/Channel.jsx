@@ -1,20 +1,13 @@
-import { useVideoContext } from '../context/VideoDataContext';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchApi } from '../utils/api';
-import VideoCard from '../components/VideoCard';
-
+import { useVideoContext } from "../context/VideoDataContext";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { fetchApi } from "../utils/api";
+import VideoCard from "../components/VideoCard";
 
 export default function Channel() {
-  const { 
-    channel, 
-    channelVideos, 
-    error, 
-    setChannel, 
-    setChannelVideos 
-  } = useVideoContext();
+  const { channel, channelVideos, error, setChannel, setChannelVideos } =
+    useVideoContext();
   const { id: channelId } = useParams();
-
   // 當直接從 URL 訪問頻道頁面時，載入頻道資料
   useEffect(() => {
     const loadChannelData = async () => {
@@ -24,35 +17,35 @@ export default function Channel() {
       if (channel && channel.id === channelId) return;
 
       try {
-        console.log('正在載入頻道資料:', channelId);
-        
+        console.log("正在載入頻道資料:", channelId);
+
         // 取得頻道詳細資訊
-        const channelData = await fetchApi('channels', {
-          part: 'snippet,contentDetails,statistics',
+        const channelData = await fetchApi("channels", {
+          part: "snippet,contentDetails,statistics",
           id: channelId,
         });
 
-        console.log(channelData);
+        // console.log(channelData);
 
         if (channelData.items && channelData.items.length > 0) {
           setChannel(channelData.items[0]);
 
           // 取得頻道影片
-          const searchData = await fetchApi('search', {
-            part: 'snippet',
+          const searchData = await fetchApi("search", {
+            part: "snippet",
             channelId: channelId,
             maxResults: 20,
-            order: 'date',
-            type: 'video',
+            order: "date",
+            type: "video",
           });
 
           if (searchData.items && searchData.items.length > 0) {
             const videoIds = searchData.items
               .map((item) => item.id.videoId)
-              .join(',');
+              .join(",");
 
-            const videoDetails = await fetchApi('videos', {
-              part: 'snippet,statistics,contentDetails',
+            const videoDetails = await fetchApi("videos", {
+              part: "snippet,statistics,contentDetails",
               id: videoIds,
             });
 
@@ -62,7 +55,7 @@ export default function Channel() {
           }
         }
       } catch (err) {
-        console.error('載入頻道資料失敗:', err);
+        console.error("載入頻道資料失敗:", err);
         setChannel(null);
         setChannelVideos([]);
       }
@@ -70,8 +63,6 @@ export default function Channel() {
 
     loadChannelData();
   }, [channelId, channel, setChannel, setChannelVideos]);
-
-  
 
   if (error) {
     return (
@@ -100,7 +91,7 @@ export default function Channel() {
   }
 
   const formatSubscriberCount = (count) => {
-    if (!count) return '未知';
+    if (!count) return "未知";
     const num = parseInt(count);
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}萬`;
@@ -111,12 +102,12 @@ export default function Channel() {
   };
 
   const formatVideoCount = (count) => {
-    if (!count) return '0';
+    if (!count) return "0";
     return parseInt(count).toLocaleString();
   };
 
   const formatViewCount = (count) => {
-    if (!count) return '0';
+    if (!count) return "0";
     const num = parseInt(count);
     if (num >= 100000000) {
       return `${(num / 100000000).toFixed(1)}億`;
@@ -134,12 +125,15 @@ export default function Channel() {
           {/* 頻道頭像 */}
           <div className="flex-shrink-0">
             <img
-              src={channel.snippet?.thumbnails?.high?.url || channel.snippet?.thumbnails?.default?.url}
+              src={
+                channel.snippet?.thumbnails?.high?.url ||
+                channel.snippet?.thumbnails?.default?.url
+              }
               alt={channel.snippet?.title}
               className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover"
             />
           </div>
-          
+
           {/* 頻道資訊 */}
           <div className="flex-1">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -148,23 +142,29 @@ export default function Channel() {
             <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
               {channel.snippet?.description}
             </p>
-            
+
             {/* 統計資料 */}
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-                <span className="text-gray-600 dark:text-gray-400">訂閱者數：</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  訂閱者數：
+                </span>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {formatSubscriberCount(channel.statistics?.subscriberCount)}
                 </span>
               </div>
               <div className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-                <span className="text-gray-600 dark:text-gray-400">影片數量：</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  影片數量：
+                </span>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {formatVideoCount(channel.statistics?.videoCount)}
                 </span>
               </div>
               <div className="bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-                <span className="text-gray-600 dark:text-gray-400">總觀看次數：</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  總觀看次數：
+                </span>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {formatViewCount(channel.statistics?.viewCount)}
                 </span>
@@ -179,7 +179,7 @@ export default function Channel() {
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
           最新影片 ({channelVideos.length})
         </h2>
-        
+
         {channelVideos.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {channelVideos.map((video) => (

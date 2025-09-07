@@ -1,10 +1,10 @@
-import { useVideoContext } from '../context/VideoDataContext';
-import { useParams, Link } from 'react-router-dom';
+import { useVideoContext } from "../context/VideoDataContext";
+import { useParams, Link } from "react-router-dom";
 
 export default function VideoDetail() {
   const { selectedVideo } = useVideoContext();
   const { id } = useParams();
-  console.log(selectedVideo);
+
   if (selectedVideo === null) return;
   const { snippet } = selectedVideo;
   return (
@@ -12,7 +12,7 @@ export default function VideoDetail() {
       <div className="max-w-4xl mx-auto">
         <div
           className="relative w-full mb-6"
-          style={{ paddingBottom: '56.25%' }}
+          style={{ paddingBottom: "56.25%" }}
         >
           <iframe
             src={`https://www.youtube.com/embed/${id}`}
@@ -34,7 +34,7 @@ export default function VideoDetail() {
               {snippet.channelTitle}
             </Link>
             <span className="text-sm text-gray-500 dark:text-gray-400 ml-4">
-              {new Date(snippet.publishedAt).toLocaleDateString('zh-TW')}
+              {new Date(snippet.publishedAt).toLocaleDateString("zh-TW")}
             </span>
           </div>
           <div className="text-gray-700 dark:text-gray-300">

@@ -1,35 +1,38 @@
-import { useVideoContext } from '../context/VideoDataContext';
-import { useNavigate } from 'react-router-dom';
+import { useVideoContext } from "../context/VideoDataContext";
+import { useNavigate } from "react-router-dom";
 
 export default function VideoCard({ video }) {
   const navigate = useNavigate();
   const { videos, channelVideos, setSelectedVideo } = useVideoContext();
 
-  console.log(channelVideos);
   if (!video) return null;
 
   const { snippet, id } = video;
-  
+
+  const videoId = typeof id === "string" ? id : id?.videoId;
+
   const thumbnail =
     snippet.thumbnails?.high?.url || snippet.thumbnails?.default?.url;
 
-  const videoItem = id.videoId ? videos : channelVideos;
-  function handleVideoDetail(id) {
+  const videoItem = typeof id === "string" ? channelVideos : videos;
+
+  function handleVideoDetail(videoId) {
     const videoDetail = videoItem.find((item) => {
-      return id === item.id;
+      return videoId === item.id;
     });
     console.log(videoDetail);
     if (videoDetail) {
       setSelectedVideo?.(videoDetail);
     } else {
-      console.error('找不到影片詳情');
+      console.error("找不到影片詳情");
     }
-    navigate(`/video/${id}`);
+
+    navigate(`/video/${videoId}`);
   }
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer">
-      <div onClick={() => handleVideoDetail(id)}>
+      <div onClick={() => handleVideoDetail(videoId)}>
         <img
           src={thumbnail}
           alt={snippet.title}
@@ -43,7 +46,7 @@ export default function VideoCard({ video }) {
             {snippet.channelTitle}
           </p>
           <time className="text-xs text-gray-500 dark:text-gray-500">
-            {new Date(snippet.publishedAt).toLocaleDateString('zh-TW')}
+            {new Date(snippet.publishedAt).toLocaleDateString("zh-TW")}
           </time>
         </div>
       </div>
