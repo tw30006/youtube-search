@@ -6,6 +6,8 @@ export const VideoContext = createContext();
 export const VideoContextProvider = ({ children }) => {
   const [searchResults, setSarchResults] = useState([]);
   const [videos, setVideos] = useState([]);
+  const [channel, setChannel] = useState(null);
+  const [channelVideos, setChannelVideos] = useState([]);
   const [query, setQuery] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -75,14 +77,113 @@ export const VideoContextProvider = ({ children }) => {
     // console.log(videos);
   }, [searchResults]);
 
+  //我要取得頻道的詳細資料
+  useEffect(() => {
+    if (!selectedVideo || !selectedVideo.snippet?.channelId) {
+      setChannel(null);
+      setChannelVideos([]);
+      return;
+    }
+
+    const getChannelDetail = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const channelId = selectedVideo.snippet.channelId;
+        console.log('正在取得頻道資料:', channelId);
+
+        const channelData = await fetchApi('channels', {
+          part: 'snippet,contentDetails,statistics',
+          id: channelId,
+        });
+        // console.log('頻道詳細資料:', channelData.items);
+        // console.log('頻道詳細資料:', channelData.items[0]);
+        // setChannel(channelData.items[0] || null);
+        const uploadsPlaylistId =
+          channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+        const playlistData = await fetchApi('playlistItems', {
+          part: 'snippet,contentDetails',
+          playlistId: uploadsPlaylistId,
+          maxResults: 20, // 一次最多 50，可以分頁抓
+        });
+        setChannelVideos(playlistData.items || []);
+      } catch (err) {
+        setError('取得頻道詳細資料失敗');
+        console.error('頻道詳細資料取得失敗:', err);
+        // setChannel(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getChannelDetail();
+  }, [selectedVideo]);
+
+  //取得頻道的影片列表
+  // useEffect(() => {
+  //   if (!channel || !channel.id) {
+  //     setChannelVideos([]);
+  //     return;
+  //   }
+
+  //   const getChannelVideos = async () => {
+  //     setLoading(true);
+  //     setError(null);
+  //     try {
+  //       const channelId = channel.id;
+  //       console.log('正在取得頻道影片:', channelId);
+
+  //       // 搜尋該頻道的影片
+  //       const searchData = await fetchApi('search', {
+  //         part: 'snippet',
+  //         channelId: channelId,
+  //         maxResults: 20,
+  //         order: 'date',
+  //         type: 'video',
+  //       });
+
+  //       if (searchData.items && searchData.items.length > 0) {
+  //         // 取得影片的詳細資訊
+  //         const videoIds = searchData.items
+  //           .map((item) => item.id.videoId)
+  //           .join(',');
+
+  //         const videoDetails = await fetchApi('videos', {
+  //           part: 'snippet,statistics,contentDetails',
+  //           id: videoIds,
+  //         });
+
+  //         setChannelVideos(videoDetails.items || []);
+  //         console.log('頻道影片列表:', videoDetails.items);
+  //       } else {
+  //         setChannelVideos([]);
+  //       }
+  //     } catch (err) {
+  //       setError('取得頻道影片失敗');
+  //       console.error('頻道影片取得失敗:', err);
+  //       setChannelVideos([]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   getChannelVideos();
+  // }, [channel]);
+
   const value = {
     searchResults,
     videos,
+    channel,
+    channelVideos,
     query,
     selectedVideo,
+    loading,
+    error,
     setQuery,
     setSarchResults,
     setSelectedVideo,
+    setChannel,
+    setChannelVideos,
   };
 
   return <VideoContext value={value}>{children}</VideoContext>;
