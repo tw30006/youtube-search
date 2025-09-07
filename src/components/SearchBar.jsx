@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function SearchBar({ onSearch }) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   //處理輸入變更
   function handleInputChange(e) {
@@ -11,7 +11,7 @@ export default function SearchBar({ onSearch }) {
 
   //我按enter之後再發送api
   function handleKeyDown(e) {
-    if (e.code === 'Enter') {
+    if (e.code === "Enter") {
       performSearch(input);
     }
   }
@@ -23,14 +23,14 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <div>
+    <div className="py-3 flex justify-center">
       <input
         type="text"
         placeholder="搜尋 youtube 影片..."
         value={input}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+        className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 w-[50%]"
       />
     </div>
   );

@@ -31,7 +31,7 @@ export default function VideoCard({ video }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md  cursor-pointer">
       <div onClick={() => handleVideoDetail(videoId)}>
         <img
           src={thumbnail}

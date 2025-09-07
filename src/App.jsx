@@ -1,12 +1,12 @@
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
-import SearchResults from './pages/SearchResults';
-import TrendingVideos from './pages/TrendingVideos';
-import VideoDetail from './pages/VideoDetail';
-import Channel from './pages/Channel';
-import './App.css';
-import { VideoContextProvider } from './context/VideoDataContext';
+import SearchResults from "./pages/SearchResults";
+import TrendingVideos from "./pages/TrendingVideos";
+import VideoDetail from "./pages/VideoDetail";
+import Channel from "./pages/Channel";
+import "./App.css";
+import { VideoContextProvider } from "./context/VideoDataContext";
 
 function App() {
   return (
