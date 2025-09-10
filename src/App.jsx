@@ -5,6 +5,7 @@ import SearchResults from "./pages/SearchResults";
 import TrendingVideos from "./pages/TrendingVideos";
 import VideoDetail from "./pages/VideoDetail";
 import Channel from "./pages/Channel";
+import ChannelAnalytics from "./pages/ChannelAnalytics";
 import "./App.css";
 import { VideoContextProvider } from "./context/VideoDataContext";
 
@@ -19,6 +20,10 @@ function App() {
             <Route path="/trending" element={<TrendingVideos />} />
             <Route path="/video/:id" element={<VideoDetail />}></Route>
             <Route path="/channel/:id" element={<Channel />}></Route>
+            <Route
+              path="/channelanalytics"
+              element={<ChannelAnalytics />}
+            ></Route>
           </Routes>
         </main>
       </div>
