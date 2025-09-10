@@ -1,6 +1,6 @@
 import { useVideoContext } from "../context/VideoDataContext";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { fetchApi } from "../utils/api";
 import VideoCard from "../components/VideoCard";
 
@@ -172,6 +172,15 @@ export default function Channel() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex justify-end mb-5">
+        <Link
+          to="/channelanalytics"
+          className="p-2 border rounded-md cursor-pointer hover:bg-gray-600 hover:border-gray-600"
+        >
+          頻道影片數據分析
+        </Link>
       </div>
 
       {/* 影片列表 */}
