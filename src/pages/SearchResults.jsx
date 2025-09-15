@@ -1,11 +1,11 @@
-import VideoCard from "../components/VideoCard";
-import SearchBar from "../components/SearchBar";
+import VideoCard from '../components/VideoCard';
+import SearchBar from '../components/SearchBar';
 
 // import { useState, useEffect } from 'react';
-import { useVideoContext } from "../context/VideoDataContext";
+import { useVideoContext } from '../context/VideoDataContext';
 
 export default function SearchResults() {
-  const { searchResults, query, setQuery } = useVideoContext();
+  const { searchResults, setQuery } = useVideoContext();
 
   function handleQuery(searchQuery) {
     setQuery(searchQuery); // 接收並設置查詢參數
