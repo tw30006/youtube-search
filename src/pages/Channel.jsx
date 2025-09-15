@@ -1,8 +1,8 @@
-import { useVideoContext } from "../context/VideoDataContext";
-import { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { fetchApi } from "../utils/api";
-import VideoCard from "../components/VideoCard";
+import { useVideoContext } from '../context/VideoDataContext';
+import { useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { fetchApi } from '../utils/api';
+import VideoCard from '../components/VideoCard';
 
 export default function Channel() {
   const { channel, channelVideos, error, setChannel, setChannelVideos } =
@@ -17,11 +17,11 @@ export default function Channel() {
       if (channel && channel.id === channelId) return;
 
       try {
-        console.log("正在載入頻道資料:", channelId);
+        console.log('正在載入頻道資料:', channelId);
 
         // 取得頻道詳細資訊
-        const channelData = await fetchApi("channels", {
-          part: "snippet,contentDetails,statistics",
+        const channelData = await fetchApi('channels', {
+          part: 'snippet,contentDetails,statistics',
           id: channelId,
         });
 
@@ -31,21 +31,21 @@ export default function Channel() {
           setChannel(channelData.items[0]);
 
           // 取得頻道影片
-          const searchData = await fetchApi("search", {
-            part: "snippet",
+          const searchData = await fetchApi('search', {
+            part: 'snippet',
             channelId: channelId,
             maxResults: 20,
-            order: "date",
-            type: "video",
+            order: 'date',
+            type: 'video',
           });
 
           if (searchData.items && searchData.items.length > 0) {
             const videoIds = searchData.items
               .map((item) => item.id.videoId)
-              .join(",");
+              .join(',');
 
-            const videoDetails = await fetchApi("videos", {
-              part: "snippet,statistics,contentDetails",
+            const videoDetails = await fetchApi('videos', {
+              part: 'snippet,statistics,contentDetails',
               id: videoIds,
             });
 
@@ -55,7 +55,7 @@ export default function Channel() {
           }
         }
       } catch (err) {
-        console.error("載入頻道資料失敗:", err);
+        console.error('載入頻道資料失敗:', err);
         setChannel(null);
         setChannelVideos([]);
       }
@@ -91,7 +91,7 @@ export default function Channel() {
   }
 
   const formatSubscriberCount = (count) => {
-    if (!count) return "未知";
+    if (!count) return '未知';
     const num = parseInt(count);
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}萬`;
@@ -102,12 +102,12 @@ export default function Channel() {
   };
 
   const formatVideoCount = (count) => {
-    if (!count) return "0";
+    if (!count) return '0';
     return parseInt(count).toLocaleString();
   };
 
   const formatViewCount = (count) => {
-    if (!count) return "0";
+    if (!count) return '0';
     const num = parseInt(count);
     if (num >= 100000000) {
       return `${(num / 100000000).toFixed(1)}億`;
